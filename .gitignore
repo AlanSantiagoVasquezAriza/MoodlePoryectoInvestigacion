@@ -1,0 +1,51 @@
+# Código fuente de Moodle (instalación completa, no es nuestro código)
+MoodleInvestigacion/
+
+# Código fuente de Judge0 (repositorio externo clonado)
+# Solo conservamos judge0.conf si existe en la raíz
+judge0/app/
+judge0/bin/
+judge0/config/
+judge0/db/
+judge0/docs/
+judge0/lib/
+judge0/log/
+judge0/public/
+judge0/scripts/
+judge0/spec/
+judge0/tmp/
+judge0/vendor/
+judge0/cron/
+judge0/.github/
+judge0/Dockerfile
+judge0/Gemfile
+judge0/Gemfile.lock
+judge0/Rakefile
+judge0/config.ru
+judge0/*.rb
+judge0/*.md
+judge0/LICENSE
+judge0/CHANGELOG.md
+judge0/CODE_OF_CONDUCT.md
+judge0/PRIVACY_POLICY.md
+judge0/SECURITY.md
+judge0/SPONSORSHIP.md
+judge0/TELEMETRY.md
+judge0/agricius
+judge0/.rspec
+judge0/.rubocop.yml
+judge0/.gitignore
+judge0/.dockerignore
+
+# Archivos de entorno y secretos
+.env
+*.env
+judge0/judge0.conf
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# PHP / Moodle cache
+*.cache
