@@ -464,7 +464,7 @@
             javascript: '// Escribe tu solución aquí\n',
             java:       'public class Main {\n    public static void main(String[] args) {\n        // Tu código\n    }\n}\n',
             c:          '#include <stdio.h>\nint main() {\n    // Tu código\n    return 0;\n}\n',
-            cpp:        '#include <iostream>\nusing namespace std;\nint main() {\n    // Tu código\n    return 0;\n}\n',
+            cpp:        '#include <cstdio>\nint main() {\n    // Tu código (usa scanf/printf)\n    return 0;\n}\n',
             php:        '<?php\n// Tu código\n',
             csharp:     'using System;\nclass Program {\n    static void Main() {\n        // Tu código\n    }\n}\n',
             ruby:       '# Escribe tu solución aquí\n',

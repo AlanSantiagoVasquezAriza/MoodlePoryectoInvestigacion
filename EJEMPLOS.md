@@ -359,14 +359,15 @@ void fibonacci(int n) {
 
 **Lenguaje:** `cpp`
 
+> ⚠️ **Importante:** Usa `#include <cstdio>` con `scanf`/`printf`. **Evita `#include <iostream>`** — en algunos servidores tarda demasiado en compilar y genera error de tiempo.
+
 **Código inicial:**
 ```cpp
-#include <iostream>
-using namespace std;
+#include <cstdio>
 
 int main() {
     int a, b;
-    cin >> a >> b;
+    scanf("%d %d", &a, &b);
     // Escribe aquí tu lógica:
     return 0;
 }
@@ -385,30 +386,23 @@ int main() {
 
 **Código inicial:**
 ```cpp
-#include <vector>
-using namespace std;
+#include <cstdio>
 
-vector<int> fibonacci(int n) {
-    // Retorna un vector con los primeros n números de Fibonacci
+void fibonacci(int n) {
+    // Imprime los primeros n números de Fibonacci separados por coma y espacio
 }
 ```
 
 **Código envolvente (runner):**
 ```cpp
-#include <iostream>
-#include <vector>
-using namespace std;
+#include <cstdio>
 {{CODE}}
 int main() {
     int n;
-    cin >> n;
-    vector<int> result = fibonacci(n);
-    cout << "[";
-    for (int i = 0; i < result.size(); i++) {
-        if (i > 0) cout << ", ";
-        cout << result[i];
-    }
-    cout << "]" << endl;
+    scanf("%d", &n);
+    printf("[");
+    fibonacci(n);
+    printf("]\n");
     return 0;
 }
 ```
@@ -424,33 +418,29 @@ int main() {
 
 ### 🧑‍💻 Código del estudiante — Ejercicio A
 ```cpp
-#include <iostream>
-using namespace std;
+#include <cstdio>
 
 int main() {
     int a, b;
-    cin >> a >> b;
-    cout << a + b << endl;
+    scanf("%d %d", &a, &b);
+    printf("%d\n", a + b);
     return 0;
 }
 ```
 
 ### 🧑‍💻 Código del estudiante — Ejercicio B (con runner activo)
 ```cpp
-#include <vector>
-using namespace std;
+#include <cstdio>
 
-vector<int> fibonacci(int n) {
-    vector<int> serie;
-    if (n <= 0) return serie;
+void fibonacci(int n) {
     int a = 0, b = 1;
     for (int i = 0; i < n; i++) {
-        serie.push_back(a);
+        if (i > 0) printf(", ");
+        printf("%d", a);
         int sig = a + b;
         a = b;
         b = sig;
     }
-    return serie;
 }
 ```
 
@@ -879,7 +869,7 @@ fun fibonacci(n: Int): List<Int> {
 | **JavaScript** | Lee stdin con `fs.readFileSync('/dev/stdin')` |
 | **Java** | La clase **siempre debe llamarse `Main`** |
 | **C** | Usa `scanf` para leer, `printf` para imprimir |
-| **C++** | Usa `cin >>` y `cout <<` |
+| **C++** | Usa `#include <cstdio>` con `scanf`/`printf` — **NO uses `<iostream>`** (muy lento en compilar) |
 | **PHP** | Lee con `fgets(STDIN)` |
 | **C#** | Lee con `Console.ReadLine()` |
 | **Ruby** | Lee con `gets` |

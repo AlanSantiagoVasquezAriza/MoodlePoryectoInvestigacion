@@ -31,10 +31,10 @@ class judge0_executor extends base_executor {
     /** @var bool Si usar X-Auth-Token (Judge0 auto-alojado) o RapidAPI */
     private bool $self_hosted;
 
-    /** Reintentos máximos esperando resultado */
-    private const MAX_POLL_ATTEMPTS = 10;
-    /** Tiempo de espera entre reintentos (microsegundos) */
-    private const POLL_INTERVAL_US = 500000; // 0.5 seg
+    /** Reintentos máximos esperando resultado (30 × 0.8s = 24 segundos máximo) */
+    private const MAX_POLL_ATTEMPTS = 30;
+    /** Tiempo de espera entre reintentos (microsegundos) — 800ms */
+    private const POLL_INTERVAL_US = 800000;
 
     public function __construct(int $time_limit = 5, int $memory_limit = 128) {
         parent::__construct($time_limit, $memory_limit);
@@ -48,18 +48,33 @@ class judge0_executor extends base_executor {
     }
 
     /**
+     * Lenguajes que usan JVM y necesitan más memoria mínima.
+     */
+    private const JVM_LANGUAGES = ['java', 'kotlin', 'scala'];
+
+    /**
+     * Memoria mínima garantizada para lenguajes JVM (en MB).
+     * La JVM necesita al menos 256 MB para arrancar correctamente.
+     */
+    private const JVM_MIN_MEMORY_MB = 256;
+
+    /**
      * Ejecuta el código en Judge0 y devuelve el resultado.
      */
     public function execute(string $code, string $language, string $stdin = ''): execution_result {
         $language_id = $this->get_language_id($language);
 
+        // Los lenguajes JVM (Java, Kotlin) necesitan más memoria para arrancar la JVM.
+        $effective_memory = in_array($language, self::JVM_LANGUAGES)
+            ? max($this->memory_limit, self::JVM_MIN_MEMORY_MB)
+            : $this->memory_limit;
+
         $payload = [
             'source_code'     => base64_encode($code),
             'language_id'     => $language_id,
             'stdin'           => base64_encode($stdin),
-            'cpu_time_limit'  => $this->time_limit,
-            'memory_limit'    => $this->memory_limit * 1024, // Judge0 usa KB
-            'encode_output'   => false,
+            'cpu_time_limit'  => $this->time_limit > 0 ? $this->time_limit : 10,
+            'memory_limit'    => $effective_memory * 1024, // Judge0 usa KB
         ];
 
         // Enviar la tarea de ejecución.
