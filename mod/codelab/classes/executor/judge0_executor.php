@@ -60,6 +60,7 @@ class judge0_executor extends base_executor {
 
     /**
      * Ejecuta el código en Judge0 y devuelve el resultado.
+     * En caso de compilation timeout (cold start de JVM), reintenta una vez automáticamente.
      */
     public function execute(string $code, string $language, string $stdin = ''): execution_result {
         $language_id = $this->get_language_id($language);
@@ -87,7 +88,21 @@ class judge0_executor extends base_executor {
         }
 
         // Esperar el resultado.
-        return $this->poll_result($token);
+        $result = $this->poll_result($token);
+
+        // Reintento automático si hay compilation timeout (ocurre en el cold start de JVM en Docker).
+        // El segundo intento siempre es rápido porque los archivos ya están en caché del SO.
+        if ($result->status === 'compile_error'
+            && strpos($result->compile_output ?? '', 'Compilation time limit exceeded') !== false
+        ) {
+            usleep(1500000); // Esperar 1.5s antes de reintentar
+            $token2 = $this->submit_code($payload);
+            if ($token2) {
+                $result = $this->poll_result($token2);
+            }
+        }
+
+        return $result;
     }
 
     /**
